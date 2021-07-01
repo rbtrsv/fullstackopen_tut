@@ -1,0 +1,21 @@
+title 0.6_new_note_spa
+
+user->browser: clicks on the save button
+
+note over browser:
+browser starts executing callbacks
+for submit button (from spa.js) which 
+updates the DOM tree adding the note 
+and then post change to the server 
+end note
+
+browser->browser: redrawNotes()
+browser->browser: sendToServer(note)
+
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+note over browser:
+content-type: application/json
+{content: "Roy creates note", date: "2021-07-01T13:44:08.209Z"}
+end note
+server-->browser: [{"message":"note created"}] (Status Code: 201) 

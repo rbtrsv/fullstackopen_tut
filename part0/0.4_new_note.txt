@@ -1,0 +1,35 @@
+title 0.4_new_note
+
+user->browser: clicks on the save button
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+server-->browser: HTTP Status Code: 302, Location: /exampleapp/notes
+
+note over browser:
+HTTP Status Code 302 causes browser
+to request the address in the location field
+of Response Headers
+end note
+
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+server-->browser: HTML-code
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server-->browser: main.css
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+server-->browser: main.js
+
+note over browser:
+browser starts executing js-code
+that requests JSON data from server 
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: [..., {"content":"Roy was here again!","date":"2021-07-01T10:58:33.766Z"}]
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/favicon.ico
+server-->browser: HTML-code
+
+note over browser:
+browser executes the event handler
+that renders notes to display
+end note
