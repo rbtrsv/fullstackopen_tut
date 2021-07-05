@@ -10,7 +10,7 @@ const Anecdote = ({title, anecdote, votes}) => (
   <div>
     <h1>{title}</h1>
     <div>{anecdote}</div>
-    <div>has {votes} votes</div>
+    <div>has {votes} vote(s)</div>
   </div>
 )
 
