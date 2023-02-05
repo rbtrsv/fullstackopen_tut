@@ -1,11 +1,9 @@
 const Header1 = ({ name }) => {
   return <h1>{name}</h1>
 }
-
 const Header2 = ({ name }) => {
   return <h2>{name}</h2>
 }
-
 const Part = ({ name, exercises }) => {
   return (
     <p>
@@ -13,7 +11,6 @@ const Part = ({ name, exercises }) => {
     </p>
   )
 }
-
 const Content = ({ parts }) => {
   return (
     <div>
@@ -23,15 +20,12 @@ const Content = ({ parts }) => {
     </div>
   )
 }
-
 const Total = ({ parts }) => {
   const total = parts.reduce((s, p) => {
     return s + p.exercises;
   }, 0)
-
   return <b>total of {total} exercises</b>;
 }
-
 const Course = ({ course }) => {
   return (
     <div>
@@ -41,7 +35,6 @@ const Course = ({ course }) => {
     </div>
   )
 }
-
 const App = () => {
   const courses = [
     {
@@ -91,19 +84,21 @@ const App = () => {
   if(courses.length > 0) {
     return (
       <div>
-        <Header1 name='Web develepment curriculum' />
+        <Header1 name='Web development curriculum' />
         {courses.map((course) => (
         <Course key={course.id} course={course} />
         ))}
       </div>
       )
     }
+
   return (
   <div>
-    <Header1 name='Web develepment curriculum' />
+    <Header1 name='Web development curriculum' />
     <p>Course curriculum is empty.</p>
   </div>
   )
+  
 }
 
 export default App
