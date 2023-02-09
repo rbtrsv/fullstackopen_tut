@@ -1,14 +1,17 @@
 import { useState } from 'react'
 
 const Person = ({ person }) => {
-  return <div>{person.name}</div>
+  return <div>{person.name} {person.number}</div>
 }
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas',
+      number: '040-1234567'
+    }
   ]) 
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
 
   const addNewName = (e) => {
     e.preventDefault()
@@ -16,6 +19,7 @@ const App = () => {
     if (persons.filter(p => p.name === newName).length === 0) {
       const objectName = {
         name: newName,
+        number: newNumber,
       }
       setPersons(persons.concat(objectName))
     } else {
@@ -23,10 +27,15 @@ const App = () => {
     }
   
     setNewName('')
+    setNewNumber('')
   }
 
-  const handleChange = (e) => {
+  const handleNameChange = (e) => {
     setNewName(e.target.value)
+  }
+
+  const handleNumberChange = (e) => {
+    setNewNumber(e.target.value)
   }
 
   return (
@@ -34,13 +43,15 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={addNewName}>
         <div>
-          name: <input value={newName} onChange={handleChange} />
+          name: <input value={newName} onChange={handleNameChange} />
         </div>
+        <div>
+           number: <input value={newNumber} onChange={handleNumberChange} />
+         </div>
         <div>
           <button type="submit">add</button>
         </div>
       </form>
-      <div>debug: {newName}</div>
       <h2>Numbers</h2>
       <div>
          {persons.map((person) => (
