@@ -50,7 +50,7 @@ const App = () => {
     }
   ]
   
-  if(courses.length > 0) {
+  if (courses.length > 0) {
     return (
       <div>
         <Header1 name='Web development curriculum' />
