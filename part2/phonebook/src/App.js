@@ -29,7 +29,21 @@ const App = () => {
         setPersonsShown(persons.concat(returnedPersons))
       })
     } else {
-      alert(`${newPerson.name} is already added to phonebook`)
+      if (
+        window.confirm(
+          `${newPerson.name} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        personService
+           .update(persons.filter(p => p.name === newPerson.name)[0].id, newPerson)
+           .then((returnedPerson) => {
+             const newPersonsList = persons.map((person) =>
+               person.id !== returnedPerson.id ? person : returnedPerson
+             );
+             setPersons(newPersonsList);
+             setPersonsShown(newPersonsList);
+           });
+      }
     }
   
     setNewPerson({ name: "", number: "" })
