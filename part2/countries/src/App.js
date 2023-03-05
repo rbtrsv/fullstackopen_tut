@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
+import CountryInfo from "./components/CountryInfo"
 import Countries from "./components/Countries"
 
 const App = () => {
@@ -28,7 +29,14 @@ const App = () => {
       <div>
         find countries <input value={query} onChange={handleSearchInput} />
       </div>
-      <Countries countriesShown={countriesShown} />
+      <div>
+        {countriesShown.length === 1 ?
+        (<CountryInfo c={countriesShown[0]} />) : null}
+
+        {countriesShown.length > 10 ? 
+        (<div>Too many matches, specify another filter</div>) : 
+        (<Countries countriesShown={countriesShown} setCountriesShown={setCountriesShown}/>)}
+      </div>
     </div>
   )
 }
