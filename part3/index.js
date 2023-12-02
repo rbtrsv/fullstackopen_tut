@@ -33,6 +33,7 @@ app.get("/api/persons/:id", (req, res, next) => {
     .catch(error => next(error));
 });
 
+// Already implemented exercise 3.18.
 app.get("/info", (req, res) => {
   Person.countDocuments({}).then(count => {
     const date = new Date();
@@ -74,6 +75,7 @@ app.post("/api/persons", (req, res, next) => {
     .catch(error => next(error));
 });
 
+// Already implemented exercise 3.18.
 app.put("/api/persons/:id", (req, res, next) => {
   const { name, number } = req.body;
   Person.findByIdAndUpdate(req.params.id, { name, number }, { new: true })
