@@ -47,7 +47,7 @@ app.delete("/api/persons/:id", (req, res) => {
     .catch(error => res.status(400).send(error.message));
 });
 
-/* app.post("/api/persons", (req, res) => {
+app.post("/api/persons", (req, res) => {
   const { name, number } = req.body;
 
   if (!name || !number) {
@@ -61,7 +61,7 @@ app.delete("/api/persons/:id", (req, res) => {
       res.json(savedPerson);
     })
     .catch(error => res.status(400).send(error.message));
-}); */
+});
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
