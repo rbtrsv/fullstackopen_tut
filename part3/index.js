@@ -54,15 +54,31 @@ app.delete("/api/persons/:id", (req, res, next) => {
 app.post("/api/persons", (req, res, next) => {
   const { name, number } = req.body;
 
-  if (!name || !number) {
-    return res.status(400).json({ error: 'name or number is missing' });
-  }
+  Person.findOne({ name })
+    .then(existingPerson => {
+      if (existingPerson) {
+        Person.findByIdAndUpdate(existingPerson._id, { number }, { new: true })
+          .then(updatedPerson => {
+            res.json(updatedPerson);
+          })
+          .catch(error => next(error));
+      } else {
+        const person = new Person({ name, number });
+        person.save()
+          .then(savedPerson => {
+            res.json(savedPerson);
+          })
+          .catch(error => next(error));
+      }
+    })
+    .catch(error => next(error));
+});
 
-  const person = new Person({ name, number });
-
-  person.save()
-    .then(savedPerson => {
-      res.json(savedPerson);
+app.put("/api/persons/:id", (req, res, next) => {
+  const { name, number } = req.body;
+  Person.findByIdAndUpdate(req.params.id, { name, number }, { new: true })
+    .then(updatedPerson => {
+      res.json(updatedPerson);
     })
     .catch(error => next(error));
 });

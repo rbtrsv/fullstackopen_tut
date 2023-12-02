@@ -32,32 +32,31 @@ const App = () => {
 
   const addNewPerson = (e) => {
     e.preventDefault()
-
-    if (persons.filter(p => p.name === newPerson.name).length === 0) {
-      personService.create(newPerson).then((rP) => {
-        setPersons(persons.concat(rP))
-        setPersonsShown(persons.concat(rP))
-        setNotification(`Added ${newPerson.name}`)
-      })
-      .catch((e) => setNotification(e.response.data.error))
-    } else {
+  
+    const existingPerson = persons.find(p => p.name === newPerson.name);
+    if (existingPerson) {
       if (window.confirm(`${newPerson.name} is already added to phonebook, replace the old number with a new one?`)) {
         personService
-          .update(persons.filter(p => p.name === newPerson.name)[0].id, newPerson)
-          .then((rP) => {
-            const newPersonsList = persons.map((p) =>
-              p.id !== rP.id ? p : rP
-            )
-            setPersons(newPersonsList)
-            setPersonsShown(newPersonsList)
-            setNotification(`Updated ${newPerson.name}`)
-            })
-          .catch((e) => setNotification(e.response.data.error))
+          .update(existingPerson.id, newPerson)
+          .then((updatedPerson) => {
+            setPersons(persons.map(p => p.id !== updatedPerson.id ? p : updatedPerson));
+            setPersonsShown(persons.map(p => p.id !== updatedPerson.id ? p : updatedPerson));
+            setNotification(`Updated ${newPerson.name}`);
+          })
+          .catch((e) => setNotification(e.response.data.error));
       }
+    } else {
+      personService.create(newPerson)
+        .then((newCreatedPerson) => {
+          setPersons(persons.concat(newCreatedPerson));
+          setPersonsShown(persons.concat(newCreatedPerson));
+          setNotification(`Added ${newPerson.name}`);
+        })
+        .catch((e) => setNotification(e.response.data.error));
     }
   
-    setNewPerson({ name: "", number: "" })
-  }
+    setNewPerson({ name: "", number: "" });
+  }  
 
   const deletePerson = (id, name) => {
     if (window.confirm(`Delete ${name}?`)) {
