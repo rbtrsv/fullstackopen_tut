@@ -40,6 +40,7 @@ app.get("/info", (req, res) => {
 });
 
 app.delete("/api/persons/:id", (req, res) => {
+  // The exercise 3.15 was already done.
   Person.findByIdAndDelete(req.params.id)
     .then(() => {
       res.status(204).end();
