@@ -52,7 +52,9 @@ const App = () => {
           setPersonsShown(persons.concat(newCreatedPerson));
           setNotification(`Added ${newPerson.name}`);
         })
-        .catch((e) => setNotification(e.response.data.error));
+        .catch((e) => {
+          setNotification(e.response.data.error);
+        });
     }
   
     setNewPerson({ name: "", number: "" });
