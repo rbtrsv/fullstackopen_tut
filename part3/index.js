@@ -83,13 +83,6 @@ app.put('/api/persons/:id', (req, res, next) => {
     .catch(error => next(error))
 })
 
-app.use((error, req, res, next) => {
-  if (error.name === 'ValidationError') {
-    return res.status(400).send({ error: error.message })
-  }
-  next(error)
-})
-
 const errorHandler = (error, req, res) => {
   console.error(error.message)
 
