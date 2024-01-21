@@ -8,3 +8,5 @@ rm -rf .git
 Delete the last commit:
 git reset --hard HEAD~1
 git push origin main --force
+
+tree -I 'node_modules' > project_structure.txt
