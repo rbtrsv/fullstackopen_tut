@@ -99,6 +99,37 @@ describe("POST requests", () => {
   }, 100000);
 });
 
+describe("DELETE requests", () => {
+  test("successfully deletes a blog post", async () => {
+    const newBlog = {
+      title: "Some temporary title",
+      author: "Random author",
+      url: "http://tempurl.test",
+      likes: 10
+    };
+
+    const createdBlog = await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+
+    const blogsAtStart = await helper.getblogsinDB();
+    const blogToDelete = createdBlog.body;
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204);
+
+    const blogsAtEnd = await helper.getblogsinDB();
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1);
+
+    const titles = blogsAtEnd.map(r => r.title);
+    expect(titles).not.toContain(blogToDelete.title);
+  }, 100000);
+});
+
+
 afterAll(() => {
   mongoose.connection.close();
 });
