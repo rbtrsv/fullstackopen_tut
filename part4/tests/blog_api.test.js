@@ -14,7 +14,7 @@ beforeEach(async () => {
 });
 
 describe("GET requests", () => {
-  test("returns the correct amount of blog posts in the JSON format", async () => {
+  test("returns the correct amount of blog posts in JSON format", async () => {
     const response = await api
       .get("/api/blogs")
       .expect(200)
@@ -126,6 +126,41 @@ describe("DELETE requests", () => {
 
     const titles = blogsAtEnd.map(r => r.title);
     expect(titles).not.toContain(blogToDelete.title);
+  }, 100000);
+});
+
+describe("PUT requests", () => {
+  test("successfully updates an existing blog post", async () => {
+    const newBlog = {
+      title: "Some temporary title",
+      author: "Random author",
+      url: "http://tempurl.test",
+      likes: 0
+    };
+
+    const createdBlog = await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+
+    const blogToUpdate = createdBlog.body;
+
+    const updatedData = {
+      ...blogToUpdate,
+      likes: 100
+    };
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updatedData)
+      .expect(200);
+
+    const updatedBlog = await api
+      .get(`/api/blogs/${blogToUpdate.id}`)
+      .expect(200);
+
+    expect(updatedBlog.body.likes).toBe(100);
   }, 100000);
 });
 
