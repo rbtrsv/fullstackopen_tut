@@ -71,6 +71,32 @@ describe("POST requests", () => {
     expect(response.body.likes).toBeDefined();
     expect(response.body.likes).toBe(0);
   }, 100000);
+
+  test("backend responds with 400 Bad Request if title is missing", async () => {
+    const blogWithoutTitle = {
+      author: "Michael Chan",
+      url: "https://reactpatterns.com/",
+      likes: 7,
+    };
+
+    await api
+      .post("/api/blogs")
+      .send(blogWithoutTitle)
+      .expect(400);
+  }, 100000);
+
+  test("backend responds with 400 Bad Request if URL is missing", async () => {
+    const blogWithoutUrl = {
+      title: "React patterns and more",
+      author: "Michael Chan",
+      likes: 7,
+    };
+
+    await api
+      .post("/api/blogs")
+      .send(blogWithoutUrl)
+      .expect(400);
+  }, 100000);
 });
 
 afterAll(() => {
