@@ -164,6 +164,30 @@ describe("PUT requests", () => {
   }, 100000);
 });
 
+describe("POST request for creating new USERS", () => {
+  test("creating new user with username that already exists", async () => {
+    const existingUser = {
+      username: "existingUser",
+      name: "Existing User",
+      password: "random123",
+    };
+
+    await api.post("/api/users").send(existingUser).expect(201);
+
+    await api.post("/api/users").send(existingUser).expect(400);
+  });
+
+  test("creating new user with too short password", async () => {
+    const userWithShortPassword = {
+      username: "newUser",
+      name: "New User",
+      password: "pw",
+    };
+
+    await api.post("/api/users").send(userWithShortPassword).expect(400);
+  });
+});
+
 
 afterAll(() => {
   mongoose.connection.close();
