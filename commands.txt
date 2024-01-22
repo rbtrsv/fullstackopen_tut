@@ -10,3 +10,7 @@ git reset --hard HEAD~1
 git push origin main --force
 
 tree -I 'node_modules' > project_structure.txt
+
+git reset --soft HEAD~2
+git reset --hard HEAD~2
+git push origin your-branch-name --force
