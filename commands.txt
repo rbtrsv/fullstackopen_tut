@@ -14,3 +14,5 @@ tree -I 'node_modules' > project_structure.txt
 git reset --soft HEAD~2
 git reset --hard HEAD~2
 git push origin your-branch-name --force
+
+npm run lint -- --fix
