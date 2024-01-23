@@ -6,6 +6,8 @@ const helper = require("./test.helper");
 
 const api = supertest(app);
 
+const validToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5ld3VzZXIiLCJpZCI6IjY1YWU3MDE1YWY2YmNkMDhmN2M1YTZkYyIsImlhdCI6MTcwNjAwMTUwMX0.Ne6aHQpyHnCIihoCjZqYQg66478dVsiM7Fx-XvlidlQ";
+
 beforeEach(async () => {
   await Blog.deleteMany({});
   const blogObjects = helper.initialBlogs.map(blog => new Blog(blog));
@@ -35,7 +37,7 @@ describe("GET requests", () => {
 });
 
 describe("POST requests", () => {
-  test("successfully creates a new blog post", async () => {
+  test("successfully creates a new blog post with a valid token", async () => {
     const newBlog = {
       title: "React patterns and more",
       author: "Michael Chan",
@@ -45,6 +47,7 @@ describe("POST requests", () => {
 
     await api
       .post("/api/blogs")
+      .set("Authorization", `bearer ${validToken}`)
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -53,6 +56,23 @@ describe("POST requests", () => {
     expect(blogsAfterPost).toHaveLength(helper.initialBlogs.length + 1);
     const titles = blogsAfterPost.map(b => b.title);
     expect(titles).toContain(newBlog.title);
+  }, 100000);
+
+  test("fails to create a new blog post if token is not provided", async () => {
+    const newBlogWithoutToken = {
+      title: "Should fail",
+      author: "No Token",
+      url: "https://fail.io/",
+      likes: 5,
+    };
+
+    await api
+      .post("/api/blogs")
+      .send(newBlogWithoutToken)
+      .expect(401);
+
+    const blogsAfterAttempt = await helper.getblogsinDB();
+    expect(blogsAfterAttempt).toHaveLength(helper.initialBlogs.length);
   }, 100000);
 
   test("verify if the likes property is missing and defaulting it to 0", async () => {
@@ -64,6 +84,7 @@ describe("POST requests", () => {
 
     const response = await api
       .post("/api/blogs")
+      .set("Authorization", `bearer ${validToken}`)
       .send(blogWithoutLikes)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -110,6 +131,7 @@ describe("DELETE requests", () => {
 
     const createdBlog = await api
       .post("/api/blogs")
+      .set("Authorization", `bearer ${validToken}`)
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -119,6 +141,7 @@ describe("DELETE requests", () => {
 
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
+      .set("Authorization", `bearer ${validToken}`)
       .expect(204);
 
     const blogsAtEnd = await helper.getblogsinDB();
