@@ -16,3 +16,5 @@ git reset --hard HEAD~2
 git push origin your-branch-name --force
 
 npm run lint -- --fix
+
+curl -X POST http://localhost:3000/api/users -H "Content-Type: application/json" -d '{"username":"user1","name":"Test User","password":"testpassword"}'
