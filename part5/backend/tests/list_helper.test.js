@@ -1,11 +1,6 @@
-const listHelper = require("../utils/list_helper");
-
-test("dummy returns one", () => {
-  const blogs = [];
-
-  const result = listHelper.dummy(blogs);
-  expect(result).toBe(1);
-});
+const assert = require('assert')
+const { test, describe } = require('node:test')
+const listHelper = require('../utils/list_helper')
 
 const blogs = [
   {
@@ -55,118 +50,82 @@ const blogs = [
     url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
     likes: 2,
     __v: 0
-  }
-];
+  }  
+]
 
-describe("total likes", () => {
-  const listWithOneBlog = [blogs[0]];
+describe('list_helper', () => {
+  test('dummy returns one', () => {
+    const blogs = []
 
-  test("when list has only one blog equals the likes of that", () => {
-    const result = listHelper.totalLikes(listWithOneBlog);
-    expect(result).toBe(listWithOneBlog[0].likes);
-  });
+    const result = listHelper.dummy(blogs)
+    assert.strictEqual(result, 1)
+  })
 
-  test("is zero when the list is emtpy", () => {
-    const result = listHelper.totalLikes([]);
-    expect(result).toBe(0);
-  });
+  describe('total likes', () => {  
+    test('when list has only one blog equals the likes of that', () => {
+      const result = listHelper.totalLikes([blogs[0]])
+      assert.strictEqual(result, blogs[0].likes)
+    })
 
-  test("when list has many blogs equals the sum of all likes", () => {
-    const result = listHelper.totalLikes(blogs);
-    expect(result).toBe(36);
-  });
-});
+    test('is zero when list empty', () => {
+      const result = listHelper.totalLikes([])
+      assert.strictEqual(result, 0)
+    })
 
-describe("favorite blog", () => {
-  const listWithOneBlog = [blogs[0]];
+    test('when list has many blogs equals the sum of likes', () => {
+      const result = listHelper.totalLikes(blogs)
+      assert.strictEqual(result, 36)
+    })
+  })  
 
-  test("when list has only one blog equals the one", () => {
-    const result = listHelper.favoriteBlog(listWithOneBlog);
-    const theBest =  {
-      title: "React patterns",
-      author: "Michael Chan",
-      url: "https://reactpatterns.com/",
-      likes: 7,
-    };
+  describe('favorite blog', () => {
+    test('when list has only one blog equals that blog', () => {
+      const result = listHelper.favoriteBlog([blogs[0]])
+      assert.deepStrictEqual(result, blogs[0])
+    })
 
-    expect(result).toEqual(theBest);
-  });
+    test('is empty object when list empty', () => {
+      const result = listHelper.favoriteBlog([])
+      assert.deepStrictEqual(result, {})
+    })
 
-  test("is undefined when the list is emtpy", () => {
-    const result = listHelper.favoriteBlog([]);
-    expect(result).toBe(undefined);
-  });
+    test('when list has many blogs equals the blog with most likes', () => {
+      const result = listHelper.favoriteBlog(blogs)
+      assert.deepStrictEqual(result, blogs[2])
+    })
+  })
 
-  test("when list has many blogs is the one that has most likes", () => {
-    const result = listHelper.favoriteBlog(blogs);
+  describe('most blogs', () => {
+    test('when list has only one blog equals the author of that blog', () => {
+      const result = listHelper.mostBlogs([blogs[0]])
+      assert.deepStrictEqual(result, { author: blogs[0].author, blogs: 1 })
+    })
 
-    const theBest =  {
-      title: "Canonical string reduction",
-      author: "Edsger W. Dijkstra",
-      url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
-      likes: 12,
-    };
+    test('is null when list empty', () => {
+      const result = listHelper.mostBlogs([])
+      assert.strictEqual(result, null)
+    })
 
-    expect(result).toEqual(theBest);
-  });
-});
+    test('when list has many blogs equals the author with most blogs', () => {
+      const result = listHelper.mostBlogs(blogs)
+      assert.deepStrictEqual(result, { author: 'Robert C. Martin', blogs: 3 })
+    })
+  })
 
-describe("favorite blog", () => {
-  const listWithOneBlog = [blogs[0]];
+  describe('most likes', () => {
+    test('when list has only one blog equals the author of that blog', () => {
+      const result = listHelper.mostLikes([blogs[0]])
+      assert.deepStrictEqual(result, { author: blogs[0].author, likes: blogs[0].likes })
+    })
 
-  test("when list has only one blog equals the author of the one", () => {
-    const result = listHelper.mostBlogs(listWithOneBlog);
-    const withMost =  {
-      author: "Michael Chan",
-      blogs: 1,
-    };
+    test('is null when list empty', () => {
+      const result = listHelper.mostLikes([])
+      assert.strictEqual(result, null)
+    })
 
-    expect(result).toEqual(withMost);
-  });
-
-  test("is undefined when the list is emtpy", () => {
-    const result = listHelper.mostBlogs([]);
-    expect(result).toBe(undefined);
-  });
-
-  test("when list has many blogs is the author that has most", () => {
-    const result = listHelper.mostBlogs(blogs);
-
-    const withMost =  {
-      author: "Robert C. Martin",
-      blogs: 3,
-    };
-
-    expect(result).toEqual(withMost);
-  });
-});
-
-describe("most likes", () => {
-  const listWithOneBlog = [blogs[0]];
-
-  test("when list has only one blog equals the author's likes of the one", () => {
-    const result = listHelper.mostLikes(listWithOneBlog);
-    const withMost =  {
-      author: "Michael Chan",
-      likes: 7,
-    };
-
-    expect(result).toEqual(withMost);
-  });
-
-  test("is undefined when the list is emtpy", () => {
-    const result = listHelper.mostLikes([]);
-    expect(result).toBe(undefined);
-  });
-
-  test("when list has many blogs is the author that has most", () => {
-    const result = listHelper.mostLikes(blogs);
-
-    const withMost =  {
-      author: "Edsger W. Dijkstra",
-      likes: 17,
-    };
-
-    expect(result).toEqual(withMost);
-  });
-});
+    test('when list has many blogs equals the author with most likes', () => {
+      const result = listHelper.mostLikes(blogs)
+      assert.deepStrictEqual(result, { author: 'Edsger W. Dijkstra', likes: 17 })
+    })
+  })
+})
